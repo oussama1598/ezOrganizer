@@ -1,11 +1,30 @@
 {
   "name": "ez-organizer",
   "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "Oussama Barkouki",
+  "description": "Organise tvshows automatically (part of the 'ez' programs)",
+  "main": "dist/index.js",
+  "scripts": {
+    "prepublish": "gulp build"
+  },
+  "keywords": [
+    "tvshows",
+    "tv",
+    "shows",
+    "organise",
+    "shows",
+    "ez"
+  ],
+  "author": {
+    "name": "Oussama Barkouki",
+    "email": "oussama1598@gmail.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oussama1598/ezOrganizer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/oussama1598/ezOrganizer/issues"
+  },
   "license": "ISC",
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.36",
@@ -38,6 +57,9 @@
     "video-extensions": "^1.1.0"
   },
   "bin": {
-    "ezOrganizer": "index.js"
-  }
+    "ezOrganizer": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ]
 }
