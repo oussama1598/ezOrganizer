@@ -26,6 +26,14 @@ gulp.task('clean:dist', () => del(
   })
 )
 
+gulp.task('copy:index', () => {
+  gulp.src('index.js')
+    .pipe(plugins.removeCode({
+      production: true
+    }))
+    .pipe(gulp.dest(paths.dist))
+})
+
 gulp.task('copy:server', () => {
   return gulp.src([
     'package.json'
@@ -51,6 +59,7 @@ gulp.task('build', cb => {
     'clean:dist',
     'transpile:server',
     'copy:server',
+    'copy:index',
     cb
   )
 })
