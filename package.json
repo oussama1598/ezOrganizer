@@ -1,0 +1,42 @@
+{
+  "name": "ez-organizer",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "Oussama Barkouki",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.36",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.36",
+    "@babel/polyfill": "^7.0.0-beta.36",
+    "@babel/preset-env": "^7.0.0-beta.36",
+    "@babel/register": "^7.0.0-beta.36",
+    "del": "^3.0.0",
+    "eslint": "^4.18.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "gulp": "^3.9.1",
+    "gulp-babel": "^8.0.0-beta.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-sourcemaps": "^2.6.2",
+    "run-sequence": "^2.2.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.0.0-beta.36",
+    "app-module-path": "^2.2.0",
+    "commander": "^2.11.0",
+    "mkdirp": "^0.5.1",
+    "progress": "^2.0.0",
+    "recursive-readdir": "^2.2.1",
+    "request-promise": "^4.2.2",
+    "video-extensions": "^1.1.0"
+  },
+  "bin": {
+    "ezOrganizer": "index.js"
+  }
+}
