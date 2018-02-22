@@ -7,7 +7,7 @@ ezOrganizer is an application that's part of the 'ez' programs, this app makes o
 Install via npm :
 
 ``` bash
-npm install -g ezOrganizer
+npm install -g ez-organizer
 ```
 
 **Note** for linux you may have to use 'sudo'

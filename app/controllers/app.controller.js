@@ -14,7 +14,9 @@ export default class AppController {
   async organizeShows () {
     const parseFolder = await this._processFolder()
 
-    console.log(`    Copying a totol of ${parseFolder.totalFiles} files`)
+    if (!parseFolder.totalFiles) return console.log('    All set no files to copy')
+
+    console.log(`    Copying a total of ${parseFolder.totalFiles} files`)
 
     this._createDirStructure(
       this.outputDir,

@@ -1,6 +1,6 @@
 {
   "name": "ez-organizer",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Organise tvshows automatically (part of the 'ez' programs)",
   "main": "dist/index.js",
   "scripts": {
