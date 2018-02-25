@@ -19,12 +19,10 @@ export default class AppController {
     console.log(`    Copying a total of ${parseFolder.totalFiles} files`)
 
     this._createDirStructure(
-      this.outputDir,
       parseFolder.showCollection
     )
 
     await this._copyFiles(
-      this.outputDir,
       parseFolder.showCollection
     )
   }
@@ -36,11 +34,14 @@ export default class AppController {
     ).load()
     const allEpisodes = inputDir.getStructure()
       .filter(file => episode.isEpisode(file))
-      .map(file => new Episode(file))
+      .map(file => new Episode(
+        file,
+        this.outputDir
+      ))
 
     const episodes = await Promise.all(
       allEpisodes.map(
-        episode => episode.allowedToCopy(this.outputDir)
+        episode => episode.allowedToCopy()
           .then(allowed => allowed ? episode : null)
       )
     ).then(episodes => episodes.filter(episode => episode))
@@ -66,35 +67,27 @@ export default class AppController {
     }
   }
 
-  _createDirStructure (outputDirURI, showCollection) {
-    for (const [showName, show] of showCollection) {
-      for (const [seasonNum] of show.seasons) {
+  _createDirStructure (showCollection) {
+    for (const show of showCollection.values()) {
+      for (const season of show.seasons.values()) {
+        const outputDir = [...season.values()][0].outpuDirURI
+
         folderHelper.createDir(
-          folderHelper.structureShow(
-            outputDirURI,
-            showName,
-            seasonNum
-          )
+          outputDir
         )
       }
     }
   }
 
-  async _copyFiles (outputDirURI, showCollection) {
+  async _copyFiles (showCollection) {
     let count = 1
 
-    for (const [showName, show] of showCollection) {
-      for (const [seasonNum, season] of show.seasons) {
+    for (const show of showCollection.values()) {
+      for (const season of show.seasons.values()) {
         for (const episode of season.values()) {
-          const outputURI = folderHelper.structureShow(
-            outputDirURI,
-            showName,
-            seasonNum
-          )
-
-          await episode.stream.copy(
-            outputURI,
-            count
+          await episode.stream.copy(count)
+          await episode.stream.delete(
+            this.inputDir
           )
 
           count++

@@ -14,5 +14,9 @@ commander
     commander.output
   )
 
-  await appController.organizeShows()
+  try {
+    await appController.organizeShows()
+  } catch (err) {
+    console.log(err.stack)
+  }
 })()

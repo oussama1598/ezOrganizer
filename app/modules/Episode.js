@@ -4,20 +4,27 @@ import * as folderHelper from 'helpers/folder'
 import FileStream from 'modules/FileStream'
 
 export default class Episode {
-  constructor (_URI) {
+  constructor (_URI, _outputURI) {
     this.fileUri = _URI
-    this.episodeData = {}
-    this.stream = new FileStream(_URI)
-
-    this._parseData()
+    this.episodeData = this._parseData()
+    this.outpuDirURI = folderHelper.structureShow(
+      _outputURI,
+      this.episodeData.showName,
+      this.episodeData.season
+    )
+    this.outputFileName = this._outputFileName()
+    this.stream = new FileStream(
+      _URI,
+      this.outputFileName
+    )
   }
 
   getEpisodeData () {
     return this.episodeData
   }
 
-  async allowedToCopy (outpuDirURI) {
-    const distinationStat = await this._existsInDistination(outpuDirURI)
+  async allowedToCopy () {
+    const distinationStat = await this._existsInDistination()
 
     if (!distinationStat) return true
 
@@ -32,20 +39,15 @@ export default class Episode {
     return fileInputSize !== stat.size
   }
 
-  async _existsInDistination (outpuDirURI) {
+  async _existsInDistination () {
     return this.stream.exists(
-      this._outputFileName(outpuDirURI)
+      this.outputFileName
     )
   }
 
-  _outputFileName (outpuDirURI) {
-    const distFolder = folderHelper.structureShow(
-      outpuDirURI,
-      this.episodeData.showName,
-      this.episodeData.season
-    )
+  _outputFileName () {
     return path.join(
-      distFolder,
+      this.outpuDirURI,
       this.episodeData.filename
     )
   }
@@ -72,7 +74,7 @@ export default class Episode {
       ).replace(/s/ig, '')
     )
 
-    this.episodeData = {
+    return {
       filename,
       showName,
       episode,

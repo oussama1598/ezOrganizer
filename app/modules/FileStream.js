@@ -1,27 +1,29 @@
-import * as path from 'path'
-import * as fs from 'fs'
+import path from 'path'
+import fs from 'fs-extra'
 import Progress from 'progress'
+import truncate from 'truncate'
 
 export default class FileStream {
-  constructor (_fileUri) {
+  constructor (_fileUri, _outputURI) {
     this.fileUri = _fileUri
+    this.outputURI = _outputURI
     this.filename = path.basename(_fileUri)
   }
 
-  async copy (toUri, id) {
+  async copy (id) {
     const fileStats = await this._fileStats(
       this.fileUri
     )
-    const bar = new Progress(`    ${id}. Copying ${this.filename} [:bar] :percent`, {
+    const bar = new Progress(`    ${id}. Copying ${truncate(this.filename, 100)} [:bar] :percent`, {
       width: 30,
       total: fileStats.size
     })
     const fileStream = fs.createReadStream(this.fileUri)
     const writeStream = fs.createWriteStream(
-      path.join(toUri, this.filename)
+      this.outputURI
     )
 
-    await new Promise(resolve => {
+    return new Promise(resolve => {
       fileStream
         .on('data', chunk => bar.tick(chunk.length))
         .on('end', () => {
@@ -36,14 +38,34 @@ export default class FileStream {
 
   async exists (uri) {
     try {
-      return this._fileStats(uri)
+      const stat = await this._fileStats(uri)
+
+      return stat
     } catch (err) {
       return false
     }
   }
 
-  delete () {
-    // unlink
+  delete (inputFolder) {
+    // const parentDir = this._searchForParentDir(inputFolder)
+    // const uriToDelete = parentDir !== this.filename
+    //   ? parentDir
+    //   : this.filename
+
+    return this._del(
+      path.join(
+        inputFolder,
+        this.filename // uriToDelete
+      )
+    )
+  }
+
+  _del (URI) {
+    return fs.remove(URI)
+  }
+
+  _searchForParentDir (inputFolder) {
+    return path.relative(inputFolder, this.fileUri).split('/')[0]
   }
 
   _fileStats (_uri) {
