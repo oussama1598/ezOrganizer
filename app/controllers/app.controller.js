@@ -40,8 +40,8 @@ export default class AppController {
 
     const episodes = await Promise.all(
       allEpisodes.map(
-        episode => episode.existsInDistination(this.outputDir)
-          .then(exists => exists ? null : episode)
+        episode => episode.allowedToCopy(this.outputDir)
+          .then(allowed => allowed ? episode : null)
       )
     ).then(episodes => episodes.filter(episode => episode))
 

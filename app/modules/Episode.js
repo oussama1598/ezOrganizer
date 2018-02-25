@@ -12,23 +12,42 @@ export default class Episode {
     this._parseData()
   }
 
-  async existsInDistination (outpuDirURI) {
+  getEpisodeData () {
+    return this.episodeData
+  }
+
+  async allowedToCopy (outpuDirURI) {
+    const distinationStat = await this._existsInDistination(outpuDirURI)
+
+    if (!distinationStat) return true
+
+    return this._notInputSameAsOutput(distinationStat)
+  }
+
+  async _notInputSameAsOutput (stat) {
+    const fileInputSize = await this.stream._fileStats(
+      this.fileUri
+    ).then(stat => stat.size)
+
+    return fileInputSize !== stat.size
+  }
+
+  async _existsInDistination (outpuDirURI) {
+    return this.stream.exists(
+      this._outputFileName(outpuDirURI)
+    )
+  }
+
+  _outputFileName (outpuDirURI) {
     const distFolder = folderHelper.structureShow(
       outpuDirURI,
       this.episodeData.showName,
       this.episodeData.season
     )
-    const outputFile = path.join(
+    return path.join(
       distFolder,
       this.episodeData.filename
     )
-    const exists = await this.stream.exists(outputFile)
-
-    return exists
-  }
-
-  getEpisodeData () {
-    return this.episodeData
   }
 
   _parseData () {

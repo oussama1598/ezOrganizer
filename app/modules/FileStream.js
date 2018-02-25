@@ -36,8 +36,7 @@ export default class FileStream {
 
   async exists (uri) {
     try {
-      await this._fileStats(uri)
-      return true
+      return this._fileStats(uri)
     } catch (err) {
       return false
     }
